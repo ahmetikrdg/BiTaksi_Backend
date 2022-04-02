@@ -1,0 +1,84 @@
+basePath: /
+definitions:
+  fiber.Map:
+    additionalProperties: true
+    type: object
+  models.MatchingRequest:
+    properties:
+      coordinates:
+        items:
+          type: number
+        type: array
+      id:
+        type: string
+      type:
+        type: string
+    required:
+    - coordinates
+    - type
+    type: object
+  responses.RiderResponse:
+    properties:
+      data:
+        $ref: '#/definitions/fiber.Map'
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+host: localhost:5000
+info:
+  contact:
+    email: ahmetikrdg@outlook.com
+    name: Ahmet Karadağ
+    url: http://github.com/ahmetikrdg
+  description: Find the nearest driver to rider.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Matching API
+  version: "1.0"
+paths:
+  /match:
+    post:
+      consumes:
+      - application/json
+      description: The endpoint that allows searching with a GeoJSON point to find
+        a driver if it matches the given criteria. Otherwise, the service should respond
+        with a 404 - Not Found
+      parameters:
+      - description: 'Authentication header: (If you want to use jwt, you have to
+          write a bearer space token. Example Bearer eyJhbGciO)'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Rider data
+        in: body
+        name: match
+        required: true
+        schema:
+          $ref: '#/definitions/models.MatchingRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.RiderResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.RiderResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.RiderResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.RiderResponse'
+      summary: Find The Driver
+      tags:
+      - Matching
+swagger: "2.0"

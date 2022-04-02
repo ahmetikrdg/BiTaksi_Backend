@@ -1,0 +1,263 @@
+basePath: /
+definitions:
+  fiber.Map:
+    additionalProperties: true
+    type: object
+  models.DriverLocation:
+    properties:
+      id:
+        type: string
+      location:
+        $ref: '#/definitions/models.Location'
+    required:
+    - location
+    type: object
+  models.Location:
+    properties:
+      coordinates:
+        items:
+          type: number
+        type: array
+      type:
+        type: string
+    required:
+    - coordinates
+    - type
+    type: object
+  models.RiderRequest:
+    properties:
+      coordinates:
+        items:
+          type: number
+        type: array
+      id:
+        type: string
+      type:
+        type: string
+    required:
+    - coordinates
+    - type
+    type: object
+  responses.DriverResponse:
+    properties:
+      data:
+        $ref: '#/definitions/fiber.Map'
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+host: localhost:8000
+info:
+  contact:
+    email: ahmetikrdg@outlook.com
+    name: API
+    url: http://github.com/ahmetikrdg
+  description: Find the nearest driver to rider.
+  license:
+    name: Apache 2.0
+    url: http://apache.org/licenses/LICENSE-2.0.html
+  title: Driver Location API
+  version: "1.0"
+paths:
+  /bulkOperations:
+    post:
+      consumes:
+      - application/json
+      description: An endpoint for creating a driver location. It would support batch
+        operations to handle the bulk update.
+      parameters:
+      - description: Driver data
+        in: body
+        name: drivers
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/models.DriverLocation'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+      summary: Bulk Create and Update
+      tags:
+      - Driver
+  /driver/{driverId}:
+    delete:
+      consumes:
+      - application/json
+      description: This endpoint deletes a selected data by id
+      operationId: get-string-by-int
+      parameters:
+      - description: Driver ID
+        in: path
+        name: driverId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+      summary: Delete a Driver Location
+      tags:
+      - Driver
+    get:
+      consumes:
+      - application/json
+      description: An endpoint finds a driver by the given id
+      operationId: get-string-by-int
+      parameters:
+      - description: Driver ID
+        in: path
+        name: driverId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+      summary: Search for a Driver
+      tags:
+      - Driver
+  /drivers:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint fetches all the driver data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+      summary: Fetch All Drivers
+      tags:
+      - Driver
+  /match:
+    post:
+      consumes:
+      - application/json
+      description: An endpoint for matches the nearest driver with the passenger
+      parameters:
+      - description: Driver data
+        in: body
+        name: driver
+        required: true
+        schema:
+          $ref: '#/definitions/models.RiderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+      summary: Matching a Driver Location Endpoint
+      tags:
+      - Driver
+  /matchTwo:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint searches with a different path and algorithm. Jwt
+        doesn't want to.
+      parameters:
+      - description: Driver data
+        in: body
+        name: driver
+        required: true
+        schema:
+          $ref: '#/definitions/models.RiderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.DriverResponse'
+      summary: Matching a Driver Location Endpoint
+      tags:
+      - Driver
+swagger: "2.0"
